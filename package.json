@@ -7,7 +7,7 @@
     "Nathan LaFreniere",
     "Eran Hammer <eran@hueniverse.com> (http://hueniverse.com)"
   ],
-  "repository": "git://github.com/spumko/catbox-riak",
+  "repository": "git://github.com/DanielBarnes/catbox-riak",
   "main": "index",
   "keywords": [
     "catbox",
@@ -34,7 +34,7 @@
   "licenses": [
     {
       "type": "BSD",
-      "url": "http://github.com/spumko/catbox-riak/raw/master/LICENSE"
+      "url": "http://github.com/DanielBarnes/catbox-riak/raw/master/LICENSE"
     }
   ]
 }
