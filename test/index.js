@@ -675,38 +675,36 @@ describe('Riak', function () {
         });
 
         it('deletes an expired key in a timely manner', function (done) {
-            console.log('\n\n\n\n');
+
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
                 partition: 'expiretest',
                 ttl_interval: 300
             };
-            console.log(options);
             var riak = new Riak(options);
-            riak.client = {
-                put: function (key, callback) {
-
-                    callback();
-                },
-                getIndex: function () {
-
-                    var fakestream = new require('stream').Readable({ objectMode: true });
-                    fakestream._read = function () {
-                        this.push({ keys: ['a'] });
-                        this.push(null);
-                    };
-                    return fakestream;
-                },
-                del: function (q, cb) {
-                    console.log('the delete got called');
-                    cb();
-                    done();
-                }
-            };
             riak.start(function () {
 
-                console.log('in start cb riak settings', riak.settings);
+                riak.client = {
+                    put: function (key, callback) {
+
+                        callback();
+                    },
+                    getIndex: function () {
+
+                        var fakestream = new require('stream').Readable({ objectMode: true });
+                        fakestream._read = function () {
+                            this.push({ keys: ['a'] });
+                            this.push(null);
+                        };
+                        return fakestream;
+                    },
+                    del: function (q, cb) {
+
+                        cb();
+                        done();
+                    }
+                };
                 riak.set('test', 'test', 200, function (err) {
 
                     expect(err).to.not.exist;
@@ -717,7 +715,6 @@ describe('Riak', function () {
 
     describe('#drop', function () {
 
-        console.log('\n\n\n\n');
         it('passes an error to the callback when the connection is closed', function (done) {
 
             var options = {
