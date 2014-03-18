@@ -18,8 +18,8 @@
     "node": ">=0.10.22"
   },
   "dependencies": {
-    "riakpbc": "1.2.x",
-    "hoek": "1.x.x"
+    "hoek": "1.x.x",
+    "riakpbc": "^1.2.6"
   },
   "peerDependencies": {
     "catbox": "2.x.x"
