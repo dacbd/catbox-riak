@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "hoek": "1.x.x",
-    "riakpbc": "^1.2.6"
+    "riakpbc": "1.2.6"
   },
   "peerDependencies": {
     "catbox": "2.x.x"
