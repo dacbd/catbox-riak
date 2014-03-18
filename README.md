@@ -8,7 +8,7 @@ Riak adapter for catbox
 - `host` - the Riak server hostname. Defaults to `127.0.0.1`.
 - `port` - the Riak PBC port. Defaults to `8087`.
 - `partition` - the partition will choose what riak bucket your cache will be stored in.
-- `ttl_interval` - the interval at which the the riak GC function will run in milliseconds, OR `false` to bypass running the GC function.
+- `ttl_interval` - the interval at which the the riak GC function will run in milliseconds( < `2147483647` or about 596 hours), OR `false` to bypass running the GC function.
 
 
 ### Notes

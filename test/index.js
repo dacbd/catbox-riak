@@ -7,7 +7,11 @@ var Riak = require('..');
 
 // Declare internals
 
-var internals = {};
+var internals = {
+    defaults: {
+        ttl_interval: false
+    }
+};
 
 
 // Test shortcuts
@@ -33,7 +37,7 @@ describe('Riak', function () {
 
     it('creates a new connection', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             expect(client.isReady()).to.equal(true);
@@ -43,7 +47,7 @@ describe('Riak', function () {
 
     it('closes the connection', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             expect(client.isReady()).to.equal(true);
@@ -55,7 +59,7 @@ describe('Riak', function () {
 
     it('gets an item after settig it', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             var key = { id: 'x', segment: 'test' };
@@ -74,7 +78,7 @@ describe('Riak', function () {
 
     it('fails setting an item circular references', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             var key = { id: 'x', segment: 'test' };
@@ -90,7 +94,7 @@ describe('Riak', function () {
 
     it('fails setting an item with very long ttl', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             var key = { id: 'x', segment: 'test' };
@@ -104,7 +108,7 @@ describe('Riak', function () {
 
     it('ignored starting a connection twice on same event', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         var x = 2;
         var start = function () {
 
@@ -124,7 +128,7 @@ describe('Riak', function () {
 
     it('ignored starting a connection twice chained', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             expect(err).to.not.exist;
@@ -141,7 +145,7 @@ describe('Riak', function () {
 
     it('returns not found on get when using null key', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             client.get(null, function (err, result) {
@@ -155,7 +159,7 @@ describe('Riak', function () {
 
     it('returns not found on get when item expired', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             var key = { id: 'x', segment: 'test' };
@@ -177,7 +181,7 @@ describe('Riak', function () {
 
     it('returns error on set when using null key', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             client.set(null, {}, 1000, function (err) {
@@ -190,7 +194,7 @@ describe('Riak', function () {
 
     it('returns error on get when using invalid key', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             client.get({}, function (err) {
@@ -203,7 +207,7 @@ describe('Riak', function () {
 
     it('returns error on drop when using invalid key', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             client.drop({}, function (err) {
@@ -216,7 +220,7 @@ describe('Riak', function () {
 
     it('returns error on set when using invalid key', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             client.set({}, {}, 1000, function (err) {
@@ -229,7 +233,7 @@ describe('Riak', function () {
 
     it('ignores set when using non-positive ttl value', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             var key = { id: 'x', segment: 'test' };
@@ -243,7 +247,7 @@ describe('Riak', function () {
 
     it('returns error on drop when using null key', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.start(function (err) {
 
             client.drop(null, function (err) {
@@ -256,7 +260,7 @@ describe('Riak', function () {
 
     it('returns error on get when stopped', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.stop();
         var key = { id: 'x', segment: 'test' };
         client.connection.get(key, function (err, result) {
@@ -269,7 +273,7 @@ describe('Riak', function () {
 
     it('returns error on set when stopped', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.stop();
         var key = { id: 'x', segment: 'test' };
         client.connection.set(key, 'y', 1, function (err) {
@@ -281,7 +285,7 @@ describe('Riak', function () {
 
     it('returns error on drop when stopped', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.stop();
         var key = { id: 'x', segment: 'test' };
         client.connection.drop(key, function (err) {
@@ -298,7 +302,7 @@ describe('Riak', function () {
         };
         var fn = function () {
 
-            var client = new Catbox.Client(Riak);
+            var client = new Catbox.Client(Riak, internals.defaults);
             var cache = new Catbox.Policy(config, client, '');
         };
         expect(fn).to.throw(Error);
@@ -312,7 +316,7 @@ describe('Riak', function () {
         };
         var fn = function () {
 
-            var client = new Catbox.Client(Riak);
+            var client = new Catbox.Client(Riak, internals.defaults);
             var cache = new Catbox.Policy(config, client, 'a\0b');
         };
         expect(fn).to.throw(Error);
@@ -321,7 +325,7 @@ describe('Riak', function () {
 
     it('returns error when cache item dropped while stopped', function (done) {
 
-        var client = new Catbox.Client(Riak);
+        var client = new Catbox.Client(Riak, internals.defaults);
         client.stop();
         client.drop('a', function (err) {
 
@@ -337,7 +341,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -356,7 +361,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -382,7 +388,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -399,7 +406,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -415,7 +423,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -435,7 +444,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -454,7 +464,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -478,7 +489,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -502,7 +514,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -526,7 +539,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'wwwtest'
+                partition: 'wwwtest',
+                ttl_interval: false
             };
             var key = {
                 id: 'test',
@@ -555,7 +569,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'wwwtest'
+                partition: 'wwwtest',
+                ttl_interval: false
             };
             var key = {
                 id: 'notfound',
@@ -583,7 +598,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'errortest'
+                partition: 'errortest',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -602,7 +618,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'ttltest'
+                partition: 'ttltest',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -626,7 +643,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'errortest'
+                partition: 'errortest',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -657,13 +675,14 @@ describe('Riak', function () {
         });
 
         it('deletes an expired key in a timely manner', function (done) {
-
+            console.log('\n\n\n\n');
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'expiretest'
+                partition: 'expiretest',
+                ttl_interval: 300
             };
-
+            console.log(options);
             var riak = new Riak(options);
             riak.client = {
                 put: function (key, callback) {
@@ -680,12 +699,14 @@ describe('Riak', function () {
                     return fakestream;
                 },
                 del: function (q, cb) {
+                    console.log('the delete got called');
                     cb();
                     done();
                 }
             };
             riak.start(function () {
 
+                console.log('in start cb riak settings', riak.settings);
                 riak.set('test', 'test', 200, function (err) {
 
                     expect(err).to.not.exist;
@@ -696,12 +717,14 @@ describe('Riak', function () {
 
     describe('#drop', function () {
 
+        console.log('\n\n\n\n');
         it('passes an error to the callback when the connection is closed', function (done) {
 
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'errortest'
+                partition: 'errortest',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -720,7 +743,8 @@ describe('Riak', function () {
             var options = {
                 host: '127.0.0.1',
                 port: 8087,
-                partition: 'test'
+                partition: 'test',
+                ttl_interval: false
             };
 
             var riak = new Riak(options);
@@ -747,7 +771,8 @@ describe('#stop', function () {
         var options = {
             host: '127.0.0.1',
             port: 8087,
-            partition: 'test'
+            partition: 'test',
+            ttl_interval: false
         };
 
         var riak = new Riak(options);
