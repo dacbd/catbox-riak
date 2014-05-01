@@ -35,6 +35,16 @@ describe('Riak', function () {
         done();
     });
 
+    it('throws an error when no config is passed', function (done) {
+        var fn = function () {
+
+            var client = new Catbox.Client(Riak);
+        };
+
+        expect(fn).to.throw(Error);
+        done();
+    });
+
     it('creates a new connection', function (done) {
 
         var client = new Catbox.Client(Riak, internals.defaults);
@@ -534,6 +544,31 @@ describe('Riak', function () {
             });
         });
 
+        it('passes an error to the callback when there is an error with the envelope structure part 2', function (done) {
+
+            var options = {
+                host: '127.0.0.1',
+                port: 8087,
+                partition: 'test',
+                ttl_interval: false
+            };
+
+            var riak = new Riak(options);
+            riak.client = {
+                get: function (item, callback) {
+
+                    callback(null, { content: [{ value: '{ "stored": "derp" }' }] });
+                }
+            };
+
+            riak.get('test', function (err) {
+
+                expect(err).to.exist;
+                expect(err.message).to.equal('Incorrect envelope structure');
+                done();
+            });
+        });
+
         it('is able to retrieve an object thats stored when connection is started', function (done) {
 
             var options = {
@@ -769,7 +804,7 @@ describe('#stop', function () {
             host: '127.0.0.1',
             port: 8087,
             partition: 'test',
-            ttl_interval: false
+            ttl_interval: 600
         };
 
         var riak = new Riak(options);
@@ -779,6 +814,7 @@ describe('#stop', function () {
             expect(riak.client).to.exist;
             riak.stop();
             expect(riak.client).to.not.exist;
+            expect(riak._gcfunc._onTimeout).to.equal(null);
             done();
         });
     });
