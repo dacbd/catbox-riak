@@ -3,7 +3,7 @@
 catbox-riak
 ===========
 
-Riak adapter for catbox
+Riak adapter [for catbox](https://github.com/spumko/catbox)
 
 ### Options
 
