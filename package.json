@@ -1,7 +1,7 @@
 {
   "name": "catbox-riak",
   "description": "Riak adapter for catbox",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "author": "Daniel Barnes <Dabarnes2b@gmail.com>",
   "contributors": [
     "Nathan LaFreniere",
