@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/DanielBarnes/catbox-riak.png?branch=master)](https://travis-ci.org/DanielBarnes/catbox-riak)
 
-(NOTE: travis build fails because the riakpbc requests are made before riak has finished starting up 8 vnodes, will come up with a work around eventually)
-
 
 catbox-riak
 ===========
